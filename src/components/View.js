@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { async } from '@firebase/util';
 import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
-import { db } from '../firebase/Firebase-config'
-function View() {
+import { FirebaseContext } from '../firebase/Context';
 
+function View() {
+    const {db}=useContext(FirebaseContext)
     const usersCollectionRef = collection(db, 'users')
     const [users, setUsers] = useState([])
     const [newName, setNewName] = useState("")
-    const [newAge, setNewAge] = useState(0)
+    const [newAge, setNewAge] = useState(0) 
+    
 
     useEffect(() => {
         //  getDocs(usersCollectionRef).then((res)=>{
@@ -16,7 +18,8 @@ function View() {
         //    console.log(res)
         //  })
         //=================================READ================================================ 
-        const getusers = async () => {                                                  
+        const getusers = async () => { 
+            console.log(db)                                                 
           const data = await getDocs(usersCollectionRef)
           console.log(data.docs)
           setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))          //destructuring
